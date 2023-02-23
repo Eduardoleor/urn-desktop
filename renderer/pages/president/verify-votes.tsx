@@ -2,21 +2,30 @@ import React, { CSSProperties } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Box, SxProps, Typography } from "@mui/material";
+import {
+  Box,
+  SxProps,
+  Typography,
+  Stack,
+  Button as ButtonIcon,
+} from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 
 import PrinterIllustration from "@/components/illustrations/printer.svg";
 
-import { ROUTES } from "@/constants/routes";
-
-export default function VerifyVotes() {
+export default function PresidentVerifyVotes() {
   const router = useRouter();
 
-  const handleContinue = () => {
-    router.push(ROUTES.PRESIDENT_HOME);
+  const handleBack = () => {
+    router.back();
   };
+
+  const handleDownload = () => {};
+
+  const handlePrint = () => {};
 
   return (
     <React.Fragment>
@@ -25,22 +34,37 @@ export default function VerifyVotes() {
       </Head>
       <Layout>
         <Box sx={styles.container}>
+          <ButtonIcon
+            variant="text"
+            color="secondary"
+            startIcon={<ArrowBackIosIcon />}
+            sx={{
+              width: "100px",
+              marginLeft: "120px",
+              marginBottom: "20px",
+            }}
+            onClick={handleBack}
+          >
+            Regresar
+          </ButtonIcon>
           <Typography sx={styles.title}>Impresión de votos</Typography>
           <Box sx={styles.form}>
             <PrinterIllustration />
             <Typography sx={styles.subtitle}>
               La urna contiene: 0 votos
             </Typography>
-            <Button variant="outlined">
-              <Typography style={styles.buttonTextOutline as any}>
-                Imprimir votos
-              </Typography>
-            </Button>
-            <Button variant="contained" onClick={handleContinue}>
-              <Typography style={styles.buttonText as any}>
-                Continuar
-              </Typography>
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button variant="outlined" onClick={handleDownload}>
+                <Typography style={styles.buttonTextOutline as any}>
+                  Descargar listado
+                </Typography>
+              </Button>
+              <Button variant="contained" onClick={handlePrint}>
+                <Typography style={styles.buttonText as any}>
+                  Imprimir
+                </Typography>
+              </Button>
+            </Stack>
           </Box>
         </Box>
       </Layout>

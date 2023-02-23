@@ -2,49 +2,43 @@ import React, { CSSProperties } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Box, SxProps, Typography } from "@mui/material";
+import { Box, SxProps, Typography, Stack } from "@mui/material";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
-
-import PrinterIllustration from "@/components/illustrations/printer.svg";
-
 import { ROUTES } from "@/constants/routes";
 
-export default function VerifyVotes() {
+export default function PresidentHome() {
   const router = useRouter();
 
-  const handleContinue = () => {
-    router.push(ROUTES.PRESIDENT_HOME);
+  const handleContinue = () => {};
+
+  const handleReview = () => {
+    router.push(ROUTES.PRESIDENT_VERIFY_VOTES);
   };
 
   return (
-    <React.Fragment>
+    <Layout>
       <Head>
-        <title>Impresión de Votos</title>
+        <title>Inicio | Presidente</title>
       </Head>
-      <Layout>
-        <Box sx={styles.container}>
-          <Typography sx={styles.title}>Impresión de votos</Typography>
-          <Box sx={styles.form}>
-            <PrinterIllustration />
-            <Typography sx={styles.subtitle}>
-              La urna contiene: 0 votos
-            </Typography>
-            <Button variant="outlined">
-              <Typography style={styles.buttonTextOutline as any}>
-                Imprimir votos
+      <Box sx={styles.container}>
+        <Typography sx={styles.title}>¡Bienvenido, presidente!</Typography>
+        <Box sx={styles.form}>
+          <Typography sx={styles.subtitle}>Inicio de la votación</Typography>
+          <Stack direction="row" spacing={2} my={3}>
+            <Button variant="outlined" onClick={handleReview}>
+              <Typography sx={styles.buttonTextOutline}>
+                Revisión de votos
               </Typography>
             </Button>
             <Button variant="contained" onClick={handleContinue}>
-              <Typography style={styles.buttonText as any}>
-                Continuar
-              </Typography>
+              <Typography sx={styles.buttonText}>Empezar votación</Typography>
             </Button>
-          </Box>
+          </Stack>
         </Box>
-      </Layout>
-    </React.Fragment>
+      </Box>
+    </Layout>
   );
 }
 
