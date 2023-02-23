@@ -9,16 +9,18 @@ function Home() {
   const [name, setName] = React.useState("");
 
   const router = useRouter();
-  const ipcRenderer = electron.ipcRenderer || false;
-  if (!ipcRenderer) {
-    return null;
-  }
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/todos/1")
+    fetch("http://localhost:3009/api/diaries")
       .then((res) => res.json())
-      .then((res) => setName(res.title));
+      .then((res) => {
+        const test = res[0].weather;
+        setName(test);
+      })
+      .catch((err) => console.log(err));
   }, []);
+
+  console.log(name);
 
   return (
     <React.Fragment>
