@@ -20,7 +20,9 @@
     "@mui/material": "^5.11.10",
     "@svgr/webpack": "^6.5.1",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "simple-zustand-devtools": "^1.1.0",
+    "zustand": "^4.3.3"
   },
   "devDependencies": {
     "@svgr/core": "^6.5.1",

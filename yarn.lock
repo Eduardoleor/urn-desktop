@@ -4187,6 +4187,11 @@ simple-update-notifier@^1.0.7:
   dependencies:
     semver "~7.0.0"
 
+simple-zustand-devtools@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/simple-zustand-devtools/-/simple-zustand-devtools-1.1.0.tgz#bb080b30c9930d2997f33881f63d47405226fd7f"
+  integrity sha512-Axfcfr9L3YL3kto7aschCQLY2VUlXXMnIVtaTe9Y0qWbNmPsX/y7KsNprmxBZoB0pww5ZGs1u/ohcrvQ3tE6jA==
+
 slice-ansi@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-3.0.0.tgz#31ddc10930a1b7e0b67b08c96c2f49b77a789787"
@@ -4661,3 +4666,10 @@ yauzl@^2.10.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
+
+zustand@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.3.tgz#c9113499074dde2d6d99c1b5f591e9329572c224"
+  integrity sha512-x2jXq8S0kfLGNwGh87nhRfEc2eZy37tSatpSoSIN+O6HIaBhgQHSONV/F9VNrNcBcKQu/E80K1DeHDYQC/zCrQ==
+  dependencies:
+    use-sync-external-store "1.2.0"
