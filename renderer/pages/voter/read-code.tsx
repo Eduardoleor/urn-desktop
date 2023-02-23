@@ -23,7 +23,7 @@ export default function ReadCode() {
       <Head>
         <title>Lectura de QR</title>
       </Head>
-      <Layout>
+      <Layout orientationBackground="topBottom">
         <Box sx={styles.container}>
           <Typography sx={styles.title}>
             Escanea el código en el lector
@@ -62,6 +62,7 @@ const styles: Record<string, CSSProperties | SxProps> = {
     fontWeight: "400",
     marginBottom: "50px",
     textAlign: "center",
+    marginX: 25,
   },
   subtitle: {
     color: "#000000",
@@ -91,15 +92,5 @@ const styles: Record<string, CSSProperties | SxProps> = {
     color: "#FFFFFF",
     fontSize: "35px",
     fontWeight: "700",
-  },
-  containerLogout: {
-    display: "flex",
-    justifyContent: "flex-end",
-    position: "absolute",
-    bottom: "20px",
-    right: "20px",
-    "&:hover": {
-      cursor: "pointer",
-    },
   },
 };

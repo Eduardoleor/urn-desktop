@@ -19,7 +19,8 @@
       "@/components/*": ["./renderer/components/*"],
       "@/hooks/*": ["./renderer/hooks/*"],
       "@/constants/*": ["./renderer/constants/*"],
-      "@/utils/*": ["./renderer/utils/*"]
+      "@/utils/*": ["./renderer/utils/*"],
+      "@/types/*": ["./renderer/types/*"]
     }
   },
   "exclude": ["node_modules", "renderer/next.config.js", "app", "dist"]
