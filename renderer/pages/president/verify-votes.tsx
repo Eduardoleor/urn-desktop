@@ -15,9 +15,12 @@ import Layout from "@/components/layout";
 import Button from "@/components/button";
 
 import PrinterIllustration from "@/components/illustrations/printer.svg";
+import LogOutIllustration from "@/components/illustrations/logout.svg";
 
 export default function PresidentVerifyVotes() {
   const router = useRouter();
+
+  const handleLogout = () => {};
 
   const handleBack = () => {
     router.back();
@@ -65,6 +68,9 @@ export default function PresidentVerifyVotes() {
                 </Typography>
               </Button>
             </Stack>
+          </Box>
+          <Box sx={styles.containerLogout} onClick={handleLogout}>
+            <LogOutIllustration />
           </Box>
         </Box>
       </Layout>
@@ -116,5 +122,15 @@ const styles: Record<string, CSSProperties | SxProps> = {
     color: "#FFFFFF",
     fontSize: "35px",
     fontWeight: "700",
+  },
+  containerLogout: {
+    display: "flex",
+    justifyContent: "flex-end",
+    position: "absolute",
+    bottom: "20px",
+    right: "20px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
 };

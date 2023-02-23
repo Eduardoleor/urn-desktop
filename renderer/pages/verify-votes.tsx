@@ -8,11 +8,14 @@ import Layout from "@/components/layout";
 import Button from "@/components/button";
 
 import PrinterIllustration from "@/components/illustrations/printer.svg";
+import LogOutIllustration from "@/components/illustrations/logout.svg";
 
 import { ROUTES } from "@/constants/routes";
 
 export default function VerifyVotes() {
   const router = useRouter();
+
+  const handleLogout = () => {};
 
   const handleContinue = () => {
     router.push(ROUTES.PRESIDENT_HOME);
@@ -41,6 +44,9 @@ export default function VerifyVotes() {
                 Continuar
               </Typography>
             </Button>
+          </Box>
+          <Box sx={styles.containerLogout} onClick={handleLogout}>
+            <LogOutIllustration />
           </Box>
         </Box>
       </Layout>
@@ -92,5 +98,15 @@ const styles: Record<string, CSSProperties | SxProps> = {
     color: "#FFFFFF",
     fontSize: "35px",
     fontWeight: "700",
+  },
+  containerLogout: {
+    display: "flex",
+    justifyContent: "flex-end",
+    position: "absolute",
+    bottom: "20px",
+    right: "20px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
 };

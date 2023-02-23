@@ -6,10 +6,15 @@ import { Box, SxProps, Typography, Stack } from "@mui/material";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
+
+import LogOutIllustration from "@/components/illustrations/logout.svg";
+
 import { ROUTES } from "@/constants/routes";
 
 export default function PresidentHome() {
   const router = useRouter();
+
+  const handleLogout = () => {};
 
   const handleContinue = () => {};
 
@@ -36,6 +41,9 @@ export default function PresidentHome() {
               <Typography sx={styles.buttonText}>Empezar votación</Typography>
             </Button>
           </Stack>
+        </Box>
+        <Box sx={styles.containerLogout} onClick={handleLogout}>
+          <LogOutIllustration />
         </Box>
       </Box>
     </Layout>
@@ -86,5 +94,15 @@ const styles: Record<string, CSSProperties | SxProps> = {
     color: "#FFFFFF",
     fontSize: "35px",
     fontWeight: "700",
+  },
+  containerLogout: {
+    display: "flex",
+    justifyContent: "flex-end",
+    position: "absolute",
+    bottom: "20px",
+    right: "20px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
 };
