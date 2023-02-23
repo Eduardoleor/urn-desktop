@@ -2,53 +2,48 @@ import React, { CSSProperties } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Box, SxProps, Typography, Stack } from "@mui/material";
+import { Box, Stack, SxProps, Typography } from "@mui/material";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
+import EastIcon from "@mui/icons-material/East";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 
-import LogOutIllustration from "@/components/illustrations/logout.svg";
-
 import { ROUTES } from "@/constants/routes";
 
-export default function PresidentHome() {
+export default function ReadCode() {
   const router = useRouter();
 
-  const handleLogout = () => {};
-
   const handleContinue = () => {
-    router.push(ROUTES.VOTER_READ_CODE);
-  };
-
-  const handleReview = () => {
-    router.push(ROUTES.PRESIDENT_VERIFY_VOTES);
+    router.push(ROUTES.VOTER_HOME);
   };
 
   return (
-    <Layout>
+    <React.Fragment>
       <Head>
-        <title>Inicio | Presidente</title>
+        <title>Lectura de QR</title>
       </Head>
-      <Box sx={styles.container}>
-        <Typography sx={styles.title}>¡Bienvenido, presidente!</Typography>
-        <Box sx={styles.form}>
-          <Typography sx={styles.subtitle}>Inicio de la votación</Typography>
-          <Stack direction="row" spacing={2} my={3}>
-            <Button variant="outlined" onClick={handleReview}>
+      <Layout>
+        <Box sx={styles.container}>
+          <Typography sx={styles.title}>
+            Escanea el código en el lector
+          </Typography>
+          <Box sx={styles.form}>
+            <Stack direction="row" spacing={2} mb={2}>
+              <QrCode2Icon
+                sx={{ fontSize: 250, border: "5px solid rgba(0,0,0,0.4)" }}
+              />
+              <EastIcon sx={{ fontSize: 250, color: "GrayText" }} />
+            </Stack>
+            <Button variant="outlined" onClick={handleContinue}>
               <Typography sx={styles.buttonTextOutline}>
-                Revisión de votos
+                Reintentar escaneo
               </Typography>
             </Button>
-            <Button variant="contained" onClick={handleContinue}>
-              <Typography sx={styles.buttonText}>Empezar votación</Typography>
-            </Button>
-          </Stack>
+          </Box>
         </Box>
-        <Box sx={styles.containerLogout} onClick={handleLogout}>
-          <LogOutIllustration />
-        </Box>
-      </Box>
-    </Layout>
+      </Layout>
+    </React.Fragment>
   );
 }
 
