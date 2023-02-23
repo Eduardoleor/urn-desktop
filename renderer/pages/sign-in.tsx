@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Layout from "@/components/layout";
 
-function Home() {
+function SignIn() {
   return (
     <React.Fragment>
       <Head>
@@ -17,4 +17,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default SignIn;
