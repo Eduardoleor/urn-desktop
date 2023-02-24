@@ -19,6 +19,7 @@ export default function VoterHome() {
         router.push(ROUTES.REPRESENTATIVE_FEDERAL);
         break;
       case "committee":
+        router.push(ROUTES.REPRESENTATIVE_LOCAL);
         break;
       case "associations":
         break;

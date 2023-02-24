@@ -6,4 +6,5 @@ export enum ROUTES {
   VOTER_READ_CODE = "/voter/read-code",
   VOTER_HOME = "/voter/home",
   REPRESENTATIVE_FEDERAL = "/representative/federal",
+  REPRESENTATIVE_LOCAL = "/representative/local",
 }

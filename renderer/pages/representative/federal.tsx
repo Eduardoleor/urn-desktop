@@ -121,6 +121,9 @@ export default function RepresentativeFederal() {
       <Layout colorBackground={REPRESENTATIVE_COLOR}>
         <Box sx={styles.container}>
           <Typography sx={styles.title}>{REPRESENTATIVE_TYPE}</Typography>
+          <Typography textAlign="center" variant="h3">
+            Elección de Representante
+          </Typography>
           <Box sx={styles.list}>
             <VotesList
               color={REPRESENTATIVE_COLOR}

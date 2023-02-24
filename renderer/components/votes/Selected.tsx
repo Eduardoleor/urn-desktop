@@ -69,7 +69,7 @@ const VotesSelected = ({
           <Box
             sx={{
               ...styles.box,
-              border: `2px solid ${bgColor}`,
+              border: `6px solid ${bgColor}`,
               background:
                 !isOtherVote &&
                 `linear-gradient(to top left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) calc(50% - 5px), ${bgColor} 50%, rgba(0,0,0,0) calc(50% + 0.8px), rgba(0,0,0,0) 100%), linear-gradient(to top right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) calc(50% - 5px), ${bgColor} 50%, rgba(0,0,0,0) calc(50% + 0.8px), rgba(0,0,0,0) 100%)`,
