@@ -24,6 +24,7 @@ export default function RepresentativeGov() {
   const router = useRouter();
   const user = useStore((state) => state.user);
   const voter = useStore((state) => state.voter);
+  const addVoterStep = useStore((state) => state.addVoterStep);
 
   const [isContinue, setIsContinue] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -94,6 +95,7 @@ export default function RepresentativeGov() {
   };
 
   const handleNext = () => {
+    addVoterStep("3");
     router.push(ROUTES.VOTER_HOME);
   };
 

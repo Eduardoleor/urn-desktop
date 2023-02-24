@@ -9,25 +9,55 @@ import Button from "@/components/button";
 
 import { Vote } from "@/types/votes";
 import { ROUTES } from "@/constants/routes";
+import useStore from "@/store/useStore";
 
 export default function VoterHome() {
   const router = useRouter();
 
+  const removeAllVoters = useStore((state) => state.removeAllVoters);
+  const removeAllVoterSteps = useStore((state) => state.removeAllVoterSteps);
+
+  const voterStep = useStore((state) => state.voterStep);
+
+  const isFirstStepCompleted = voterStep.includes("1");
+  const isSecondStepCompleted = voterStep.includes("2");
+  const isThirdStepCompleted = voterStep.includes("3");
+
   const handleType = (type: Vote) => {
     switch (type) {
       case "representative":
-        router.push(ROUTES.REPRESENTATIVE_FEDERAL);
+        if (!isFirstStepCompleted) {
+          router.push(ROUTES.REPRESENTATIVE_FEDERAL);
+        } else {
+          alert("Ya has realizado esta elección");
+        }
         break;
       case "committee":
-        router.push(ROUTES.REPRESENTATIVE_LOCAL);
+        if (!isSecondStepCompleted) {
+          router.push(ROUTES.REPRESENTATIVE_LOCAL);
+        } else {
+          alert("Ya has realizado esta elección");
+        }
         break;
       case "associations":
-        router.push(ROUTES.REPRESENTATIVE_GOV);
+        if (!isThirdStepCompleted) {
+          router.push(ROUTES.REPRESENTATIVE_GOV);
+        } else {
+          alert("Ya has realizado esta elección");
+        }
         break;
     }
   };
 
-  const handleContinue = () => {};
+  const handleContinue = () => {
+    if (isFirstStepCompleted && isSecondStepCompleted && isThirdStepCompleted) {
+      removeAllVoters();
+      removeAllVoterSteps();
+      router.push(ROUTES.VOTER_READ_CODE);
+    } else {
+      alert("Debes completar todas las elecciones");
+    }
+  };
 
   return (
     <React.Fragment>
@@ -42,30 +72,70 @@ export default function VoterHome() {
               Selecciona qué tipo de elección deseas:
             </Typography>
             <Button
-              variant="outlined"
+              variant={isFirstStepCompleted ? "contained" : "outlined"}
               onClick={() => handleType("representative")}
             >
-              <Typography sx={styles.buttonTextOutline}>
+              <Typography
+                sx={
+                  isFirstStepCompleted
+                    ? styles.buttonText
+                    : styles.buttonTextOutline
+                }
+              >
                 Elección de Representantes (Ej. 1)
               </Typography>
             </Button>
-            <Button variant="outlined" onClick={() => handleType("committee")}>
-              <Typography sx={styles.buttonTextOutline}>
+            <Button
+              variant={isSecondStepCompleted ? "contained" : "outlined"}
+              onClick={() => handleType("committee")}
+            >
+              <Typography
+                sx={
+                  isSecondStepCompleted
+                    ? styles.buttonText
+                    : styles.buttonTextOutline
+                }
+              >
                 Elección de Comité (Ej. 2)
               </Typography>
             </Button>
             <Button
-              variant="outlined"
+              variant={isThirdStepCompleted ? "contained" : "outlined"}
               onClick={() => handleType("associations")}
             >
-              <Typography sx={styles.buttonTextOutline}>
+              <Typography
+                sx={
+                  isThirdStepCompleted
+                    ? styles.buttonText
+                    : styles.buttonTextOutline
+                }
+              >
                 Asociaciones (Ej. 3)
               </Typography>
             </Button>
           </Box>
           <Box sx={styles.button}>
-            <Button onClick={handleContinue}>
-              <Typography sx={styles.buttonText}>Finalizar</Typography>
+            <Button
+              variant={
+                isFirstStepCompleted &&
+                isSecondStepCompleted &&
+                isThirdStepCompleted
+                  ? "outlined"
+                  : "contained"
+              }
+              onClick={handleContinue}
+            >
+              <Typography
+                sx={
+                  isFirstStepCompleted &&
+                  isSecondStepCompleted &&
+                  isThirdStepCompleted
+                    ? styles.buttonTextOutline
+                    : styles.buttonText
+                }
+              >
+                Finalizar
+              </Typography>
             </Button>
           </Box>
         </Box>
@@ -118,7 +188,7 @@ const styles: Record<string, CSSProperties | SxProps> = {
   },
   buttonText: {
     color: "#FFFFFF",
-    fontSize: "35px",
+    fontSize: "20px",
     fontWeight: "700",
   },
 };

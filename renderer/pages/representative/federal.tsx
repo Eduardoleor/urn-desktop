@@ -23,6 +23,7 @@ export default function RepresentativeFederal() {
   const router = useRouter();
   const user = useStore((state) => state.user);
   const voter = useStore((state) => state.voter);
+  const addVoterStep = useStore((state) => state.addVoterStep);
 
   const [loading, setLoading] = useState(false);
   const [isContinue, setIsContinue] = useState(false);
@@ -82,6 +83,7 @@ export default function RepresentativeFederal() {
 
   const handleContinue = () => {
     setIsContinue(false);
+    addVoterStep("1");
     router.push(ROUTES.VOTER_HOME);
   };
 

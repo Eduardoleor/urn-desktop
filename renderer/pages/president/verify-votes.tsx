@@ -41,6 +41,10 @@ export default function PresidentVerifyVotes() {
     router.back();
   };
 
+  const handleResultsEj1 = () => {
+    router.push(ROUTES.PRESIDENT_RESULTS_EJ1);
+  };
+
   const handleDownload = () => {};
 
   const obtainTotalVotes = async () => {
@@ -107,22 +111,34 @@ export default function PresidentVerifyVotes() {
               </Typography>
             </Box>
             {!loading && (
-              <Stack direction="row" spacing={2}>
-                <Button variant="outlined" onClick={handleDownload}>
+              <ReactToPrint
+                content={() => componentRef}
+                trigger={() => (
+                  <Button variant="contained">
+                    <Typography style={styles.buttonText as any}>
+                      Imprimir
+                    </Typography>
+                  </Button>
+                )}
+              />
+            )}
+            {!loading && (
+              <Stack direction="row" spacing={2} mt={2}>
+                <Button variant="outlined" onClick={handleResultsEj1}>
                   <Typography style={styles.buttonTextOutline as any}>
-                    Descargar listado
+                    Resultados EJ 1
                   </Typography>
                 </Button>
-                <ReactToPrint
-                  content={() => componentRef}
-                  trigger={() => (
-                    <Button variant="contained">
-                      <Typography style={styles.buttonText as any}>
-                        Imprimir
-                      </Typography>
-                    </Button>
-                  )}
-                />
+                <Button variant="outlined" onClick={handleDownload}>
+                  <Typography style={styles.buttonTextOutline as any}>
+                    Resultados EJ 2
+                  </Typography>
+                </Button>
+                <Button variant="outlined" onClick={handleDownload}>
+                  <Typography style={styles.buttonTextOutline as any}>
+                    Resultados EJ 3
+                  </Typography>
+                </Button>
               </Stack>
             )}
           </Box>

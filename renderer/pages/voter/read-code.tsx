@@ -18,6 +18,8 @@ import {
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import EastIcon from "@mui/icons-material/East";
 
+import LogOutIllustration from "@/components/illustrations/logout.svg";
+
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 
@@ -35,6 +37,7 @@ export default function ReadCode() {
   const [loading, setLoading] = useState(false);
 
   const user = useStore((state) => state.user);
+  const removeAllUsers = useStore((state) => state.removeAllUsers);
   const addVoter = useStore((state) => state.addVoter);
 
   const countTimer = useMemo(() => {
@@ -56,6 +59,12 @@ export default function ReadCode() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    removeAllUsers();
+    router.push(ROUTES.SING_IN);
+    // VERIFICAR CONTRASEÑA Y CERRAR URNA
   };
 
   const handleRetry = () => {
@@ -119,6 +128,9 @@ export default function ReadCode() {
               style={{ width: 0, height: 0, border: "none" }}
             />
             {loading && <CircularProgress color="secondary" />}
+            <Box sx={styles.containerLogout} onClick={handleLogout}>
+              <LogOutIllustration />
+            </Box>
           </Box>
         </Box>
       </Layout>
@@ -171,5 +183,15 @@ const styles: Record<string, CSSProperties | SxProps> = {
     color: "#FFFFFF",
     fontSize: "35px",
     fontWeight: "700",
+  },
+  containerLogout: {
+    display: "flex",
+    justifyContent: "flex-end",
+    position: "absolute",
+    top: "100px",
+    right: "120px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
 };

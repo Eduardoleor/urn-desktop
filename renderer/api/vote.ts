@@ -96,6 +96,66 @@ const fetchGovRepresentative = async () => {
   }
 };
 
+const fetchUrnStatus = async (id: string) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_API}/vote/urn-status`,
+      params: {
+        id,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const fetchUrnResult1 = async (id: string) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_API}/vote/urn-results-1`,
+      params: {
+        id,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const fetchUrnResult2 = async (id: string) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_API}/vote/urn-results-2`,
+      params: {
+        id,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const fetchUrnResult3 = async (id: string) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_API}/vote/urn-results-3`,
+      params: {
+        id,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchCountVote,
   fetchRegisterVoter,
@@ -103,4 +163,8 @@ export {
   fetchFederalRepresentative,
   fetchLocalRepresentative,
   fetchGovRepresentative,
+  fetchUrnStatus,
+  fetchUrnResult1,
+  fetchUrnResult2,
+  fetchUrnResult3,
 };

@@ -11,13 +11,13 @@ import LogOutIllustration from "@/components/illustrations/logout.svg";
 
 import { ROUTES } from "@/constants/routes";
 import useStore from "@/store/useStore";
-import { fetchCountVote } from "@/api/vote";
+import { fetchUrnStatus } from "@/api/vote";
 
 export default function PresidentHome() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
-  const [totalVotes, setTotalVotes] = useState(0);
+  const [urnIsOpen, setUrnIsOpen] = useState(false);
 
   const user = useStore((state) => state.user);
   const removeAllUsers = useStore((state) => state.removeAllUsers);
@@ -28,7 +28,7 @@ export default function PresidentHome() {
   };
 
   const handleContinue = () => {
-    if (totalVotes > 0) {
+    if (!urnIsOpen) {
       alert("Esta urna ya contiene votos y fue cerrada.");
     } else {
       router.push(ROUTES.VOTER_READ_CODE);
@@ -42,10 +42,12 @@ export default function PresidentHome() {
   const obtainTotalVotes = async () => {
     setLoading(true);
     try {
-      const total = await fetchCountVote(user[0]?.id);
-      setTotalVotes(total);
+      const status = await fetchUrnStatus(user[0]?.id);
+      setUrnIsOpen(status.isOpen);
     } catch (err) {
-      alert(err.response?.data.message || "Error al iniciar sesión");
+      alert(
+        err.response?.data.message || "Error al obtener el estado de la urna"
+      );
     } finally {
       setLoading(false);
     }
