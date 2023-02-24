@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -17,10 +17,25 @@ import Button from "@/components/button";
 import PrinterIllustration from "@/components/illustrations/printer.svg";
 import LogOutIllustration from "@/components/illustrations/logout.svg";
 
+import { ROUTES } from "@/constants/routes";
+import useStore from "@/store/useStore";
+import { fetchCountVote } from "@/api/vote";
+import ReactToPrint from "react-to-print";
+
 export default function PresidentVerifyVotes() {
   const router = useRouter();
+  let componentRef: any = useRef();
 
-  const handleLogout = () => {};
+  const [loading, setLoading] = useState(true);
+  const [totalVotes, setTotalVotes] = useState(0);
+
+  const user = useStore((state) => state.user);
+  const removeAllUsers = useStore((state) => state.removeAllUsers);
+
+  const handleLogout = () => {
+    removeAllUsers();
+    router.push(ROUTES.SING_IN);
+  };
 
   const handleBack = () => {
     router.back();
@@ -28,7 +43,21 @@ export default function PresidentVerifyVotes() {
 
   const handleDownload = () => {};
 
-  const handlePrint = () => {};
+  const obtainTotalVotes = async () => {
+    setLoading(true);
+    try {
+      const total = await fetchCountVote(user[0]?.id);
+      setTotalVotes(total);
+    } catch (err) {
+      alert(err.response?.data.message || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    obtainTotalVotes();
+  }, []);
 
   return (
     <React.Fragment>
@@ -53,21 +82,49 @@ export default function PresidentVerifyVotes() {
           <Typography sx={styles.title}>Impresión de votos</Typography>
           <Box sx={styles.form}>
             <PrinterIllustration />
-            <Typography sx={styles.subtitle}>
-              La urna contiene: 0 votos
-            </Typography>
-            <Stack direction="row" spacing={2}>
-              <Button variant="outlined" onClick={handleDownload}>
-                <Typography style={styles.buttonTextOutline as any}>
-                  Descargar listado
+            <Box ref={(el) => (componentRef = el)}>
+              <Stack direction="row" justifyContent="space-between" spacing={2}>
+                {user.length > 0 && (
+                  <Typography fontWeight="bold">
+                    {user[0]?.name?.toUpperCase()}
+                  </Typography>
+                )}
+                <Typography>
+                  {new Date().toLocaleDateString("es-MX", {
+                    timeZone: "America/Mexico_City",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    timeZoneName: "short",
+                  })}
                 </Typography>
-              </Button>
-              <Button variant="contained" onClick={handlePrint}>
-                <Typography style={styles.buttonText as any}>
-                  Imprimir
-                </Typography>
-              </Button>
-            </Stack>
+              </Stack>
+              <Typography sx={styles.subtitle}>
+                La urna contiene: {totalVotes} votos
+              </Typography>
+            </Box>
+            {!loading && (
+              <Stack direction="row" spacing={2}>
+                <Button variant="outlined" onClick={handleDownload}>
+                  <Typography style={styles.buttonTextOutline as any}>
+                    Descargar listado
+                  </Typography>
+                </Button>
+                <ReactToPrint
+                  content={() => componentRef}
+                  trigger={() => (
+                    <Button variant="contained">
+                      <Typography style={styles.buttonText as any}>
+                        Imprimir
+                      </Typography>
+                    </Button>
+                  )}
+                />
+              </Stack>
+            )}
           </Box>
           <Box sx={styles.containerLogout} onClick={handleLogout}>
             <LogOutIllustration />

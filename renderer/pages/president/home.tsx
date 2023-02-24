@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -10,19 +10,46 @@ import Button from "@/components/button";
 import LogOutIllustration from "@/components/illustrations/logout.svg";
 
 import { ROUTES } from "@/constants/routes";
+import useStore from "@/store/useStore";
+import { fetchCountVote } from "@/api/vote";
 
 export default function PresidentHome() {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(true);
+  const [totalVotes, setTotalVotes] = useState(0);
+
+  const user = useStore((state) => state.user);
+
   const handleLogout = () => {};
 
   const handleContinue = () => {
-    router.push(ROUTES.VOTER_READ_CODE);
+    if (totalVotes > 0) {
+      alert("Esta urna ya contiene votos y fue cerrada.");
+    } else {
+      router.push(ROUTES.VOTER_READ_CODE);
+    }
   };
 
   const handleReview = () => {
     router.push(ROUTES.PRESIDENT_VERIFY_VOTES);
   };
+
+  const obtainTotalVotes = async () => {
+    setLoading(true);
+    try {
+      const total = await fetchCountVote(user[0]?.id);
+      setTotalVotes(total);
+    } catch (err) {
+      alert(err.response?.data.message || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    obtainTotalVotes();
+  }, []);
 
   return (
     <Layout>
@@ -33,16 +60,18 @@ export default function PresidentHome() {
         <Typography sx={styles.title}>¡Bienvenido, presidente!</Typography>
         <Box sx={styles.form}>
           <Typography sx={styles.subtitle}>Inicio de la votación</Typography>
-          <Stack direction="row" spacing={2} my={3}>
-            <Button variant="outlined" onClick={handleReview}>
-              <Typography sx={styles.buttonTextOutline}>
-                Revisión de votos
-              </Typography>
-            </Button>
-            <Button variant="contained" onClick={handleContinue}>
-              <Typography sx={styles.buttonText}>Empezar votación</Typography>
-            </Button>
-          </Stack>
+          {!loading && (
+            <Stack direction="row" spacing={2} my={3}>
+              <Button variant="outlined" onClick={handleReview}>
+                <Typography sx={styles.buttonTextOutline}>
+                  Revisión de votos
+                </Typography>
+              </Button>
+              <Button variant="contained" onClick={handleContinue}>
+                <Typography sx={styles.buttonText}>Empezar votación</Typography>
+              </Button>
+            </Stack>
+          )}
         </Box>
         <Box sx={styles.containerLogout} onClick={handleLogout}>
           <LogOutIllustration />
