@@ -84,10 +84,23 @@ const fetchLocalRepresentative = async () => {
   }
 };
 
+const fetchGovRepresentative = async () => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_API}/vote/representative-gov`,
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchCountVote,
   fetchRegisterVoter,
   fetchRegisterVote,
   fetchFederalRepresentative,
   fetchLocalRepresentative,
+  fetchGovRepresentative,
 };

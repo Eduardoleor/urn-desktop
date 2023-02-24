@@ -8,16 +8,19 @@ import Layout from "@/components/layout";
 import VotesList from "@/components/votes/List";
 import VotesContinue from "@/components/votes/Continue";
 import { Representative } from "@/types/representative";
-import { fetchLocalRepresentative, fetchRegisterVote } from "@/api/vote";
-import { cleanNameRepresentative } from "@/utils/representative";
+import { fetchGovRepresentative, fetchRegisterVote } from "@/api/vote";
+import {
+  addOthersRepresentative,
+  cleanNameRepresentative,
+} from "@/utils/representative";
 import useStore from "@/store/useStore";
 import { ROUTES } from "@/constants/routes";
 import Button from "@/components/button";
 
-const REPRESENTATIVE_TYPE = "Diputados Locales";
-const REPRESENTATIVE_COLOR = "lightPink";
+const REPRESENTATIVE_TYPE = "Gubernatura";
+const REPRESENTATIVE_COLOR = "grey";
 const MAX_SELECTED = 3;
-export default function RepresentativeLocal() {
+export default function RepresentativeGov() {
   const router = useRouter();
   const user = useStore((state) => state.user);
   const voter = useStore((state) => state.voter);
@@ -52,9 +55,9 @@ export default function RepresentativeLocal() {
   const handleContinue = async () => {
     if (
       votesSelectedRepresentatives.length > MAX_SELECTED ||
-      votesSelectedRepresentatives.length < MAX_SELECTED
+      votesSelectedRepresentatives.length < 1
     ) {
-      alert("Debes seleccionar 3 diputados");
+      alert("Debes seleccionar  máximo 3 diputados");
       return;
     } else {
       for (let i = 0; i < votesSelectedRepresentatives.length; i++) {
@@ -97,8 +100,9 @@ export default function RepresentativeLocal() {
   const onLoadRepresentatives = async () => {
     setLoading(true);
     try {
-      const representatives = await fetchLocalRepresentative();
-      setRepresentatives(representatives);
+      const representatives = await fetchGovRepresentative();
+      const list = addOthersRepresentative(representatives);
+      setRepresentatives(list);
     } catch (err) {
       alert(err.response?.data.message || "Error al obtener los diputados");
     } finally {
@@ -114,7 +118,7 @@ export default function RepresentativeLocal() {
     return (
       <Layout colorBackground={REPRESENTATIVE_COLOR}>
         <Box sx={styles.containerLoading}>
-          <Typography variant="h4">Cargando diputados locales...</Typography>
+          <Typography variant="h4">Cargando gubernatura...</Typography>
           <CircularProgress color="secondary" sx={{ my: 2 }} />
         </Box>
       </Layout>
@@ -124,13 +128,13 @@ export default function RepresentativeLocal() {
   return (
     <React.Fragment>
       <Head>
-        <title>Diputados Locales</title>
+        <title>Gubernatura</title>
       </Head>
       <Layout colorBackground={REPRESENTATIVE_COLOR}>
         <Box sx={styles.container}>
           <Typography sx={styles.title}>{REPRESENTATIVE_TYPE}</Typography>
           <Typography textAlign="center" variant="h3">
-            Elección de Comité
+            Asociaciones
           </Typography>
           <Box sx={styles.list}>
             <VotesList

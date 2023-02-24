@@ -22,6 +22,7 @@ export default function VoterHome() {
         router.push(ROUTES.REPRESENTATIVE_LOCAL);
         break;
       case "associations":
+        router.push(ROUTES.REPRESENTATIVE_GOV);
         break;
     }
   };
