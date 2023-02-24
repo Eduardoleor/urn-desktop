@@ -21,7 +21,8 @@
       "@/constants/*": ["./renderer/constants/*"],
       "@/utils/*": ["./renderer/utils/*"],
       "@/types/*": ["./renderer/types/*"],
-      "@/store/*": ["./renderer/store/*"]
+      "@/store/*": ["./renderer/store/*"],
+      "@/api/*": ["./renderer/api/*"]
     }
   },
   "exclude": ["node_modules", "renderer/next.config.js", "app", "dist"]

@@ -2,22 +2,57 @@ import React, { CSSProperties, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Box, SxProps, Typography, TextField, Stack } from "@mui/material";
+import {
+  Box,
+  SxProps,
+  Typography,
+  TextField,
+  Stack,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
+
 import { ROUTES } from "@/constants/routes";
+import { fetchSignIn } from "@/api/auth";
+import useStore from "@/store/useStore";
 
 export default function SignIn() {
   const router = useRouter();
+  const addUser = useStore((state) => state.addUser);
 
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     user: "",
     password: "",
   });
 
-  const handleSignIn = () => {
-    router.push(ROUTES.VERIFY_VOTES);
+  const handleSignIn = async () => {
+    if (Object.values(form).some((value) => value === "")) {
+      return alert("Todos los campos son obligatorios");
+    }
+    try {
+      const user = await fetchSignIn(form.user, form.password);
+      addUser(user);
+      router.push(ROUTES.VERIFY_VOTES);
+    } catch (err) {
+      alert(err.response?.data.message || "Error al iniciar sesión");
+    }
+  };
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
   };
 
   return (
@@ -33,6 +68,7 @@ export default function SignIn() {
               <Typography sx={styles.subtitle}>Usuario:</Typography>
               <TextField
                 fullWidth
+                color="secondary"
                 value={form.user}
                 id="user-input"
                 label="Escribe aquí"
@@ -42,15 +78,32 @@ export default function SignIn() {
             </Stack>
             <Stack direction="row" spacing={5} alignItems="center">
               <Typography sx={styles.subtitle}>Contraseña:</Typography>
-              <TextField
-                fullWidth
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                type="password"
-                id="password-input"
-                label="Escribe aquí"
-                variant="outlined"
-              />
+              <FormControl variant="outlined" fullWidth color="secondary">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Escribe aquí
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                />
+              </FormControl>
             </Stack>
           </Box>
           <Box sx={styles.button}>
