@@ -1,8 +1,8 @@
-import React, { CSSProperties, useRef } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Box, SxProps, Typography } from "@mui/material";
+import { Box, Stack, SxProps, Typography } from "@mui/material";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
@@ -12,16 +12,43 @@ import LogOutIllustration from "@/components/illustrations/logout.svg";
 
 import { ROUTES } from "@/constants/routes";
 import ReactToPrint from "react-to-print";
+import useStore from "@/store/useStore";
+import { fetchCountVote } from "@/api/vote";
 
 export default function VerifyVotes() {
   const router = useRouter();
   let componentRef: any = useRef();
 
-  const handleLogout = () => {};
+  const [loading, setLoading] = useState(true);
+  const [totalVotes, setTotalVotes] = useState(0);
+
+  const user = useStore((state) => state.user);
+  const removeAllUsers = useStore((state) => state.removeAllUsers);
+
+  const handleLogout = () => {
+    removeAllUsers();
+    router.push(ROUTES.SING_IN);
+  };
 
   const handleContinue = () => {
     router.push(ROUTES.PRESIDENT_HOME);
   };
+
+  const obtainTotalVotes = async () => {
+    setLoading(true);
+    try {
+      const total = await fetchCountVote(user[0]?.id);
+      setTotalVotes(total);
+    } catch (err) {
+      alert(err.response?.data.message || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    obtainTotalVotes();
+  }, []);
 
   return (
     <React.Fragment>
@@ -34,37 +61,48 @@ export default function VerifyVotes() {
           <Box sx={styles.form}>
             <PrinterIllustration />
             <Box ref={(el) => (componentRef = el)}>
-              <Typography justifyContent="flex-end" textAlign="right">
-                {new Date().toLocaleDateString("es-MX", {
-                  timeZone: "America/Los_Angeles",
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  timeZoneName: "short",
-                })}
-              </Typography>
+              <Stack direction="row" justifyContent="space-between" spacing={2}>
+                {user.length > 0 && (
+                  <Typography fontWeight="bold">
+                    {user[0]?.name?.toUpperCase()}
+                  </Typography>
+                )}
+                <Typography>
+                  {new Date().toLocaleDateString("es-MX", {
+                    timeZone: "America/Mexico_City",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    timeZoneName: "short",
+                  })}
+                </Typography>
+              </Stack>
               <Typography sx={styles.subtitle}>
-                La urna contiene: 0 votos
+                La urna contiene: {totalVotes} votos
               </Typography>
             </Box>
-            <ReactToPrint
-              content={() => componentRef}
-              trigger={() => (
-                <Button variant="outlined">
-                  <Typography style={styles.buttonTextOutline as any}>
-                    Imprimir votos
+            {!loading && (
+              <>
+                <ReactToPrint
+                  content={() => componentRef}
+                  trigger={() => (
+                    <Button variant="outlined">
+                      <Typography style={styles.buttonTextOutline as any}>
+                        Imprimir votos
+                      </Typography>
+                    </Button>
+                  )}
+                />
+                <Button variant="contained" onClick={handleContinue}>
+                  <Typography style={styles.buttonText as any}>
+                    Continuar
                   </Typography>
                 </Button>
-              )}
-            />
-            <Button variant="contained" onClick={handleContinue}>
-              <Typography style={styles.buttonText as any}>
-                Continuar
-              </Typography>
-            </Button>
+              </>
+            )}
           </Box>
           <Box sx={styles.containerLogout} onClick={handleLogout}>
             <LogOutIllustration />
