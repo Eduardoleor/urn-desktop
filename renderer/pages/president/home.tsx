@@ -20,8 +20,12 @@ export default function PresidentHome() {
   const [totalVotes, setTotalVotes] = useState(0);
 
   const user = useStore((state) => state.user);
+  const removeAllUsers = useStore((state) => state.removeAllUsers);
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    removeAllUsers();
+    router.push(ROUTES.SING_IN);
+  };
 
   const handleContinue = () => {
     if (totalVotes > 0) {
