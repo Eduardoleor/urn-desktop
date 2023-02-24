@@ -35,6 +35,7 @@ export default function ReadCode() {
   const [loading, setLoading] = useState(false);
 
   const user = useStore((state) => state.user);
+  const addVoter = useStore((state) => state.addVoter);
 
   const countTimer = useMemo(() => {
     const minutes = Math.floor(counter / 60);
@@ -48,7 +49,8 @@ export default function ReadCode() {
     setLoading(true);
     try {
       const voter = await fetchRegisterVoter(String(user[0]?.id), code);
-      console.log(voter);
+      addVoter(voter);
+      router.push(ROUTES.VOTER_HOME);
     } catch (err) {
       alert(err.response?.data.message || "Error al iniciar votación");
     } finally {

@@ -2,11 +2,15 @@ import create from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 
 import createUserSlice from "./slices/userSlice";
-import IUser from "./types/IUser";
+import createVoterSlice from "./slices/voterSlice";
 
-type Store = IUser;
+import IUser from "./types/IUser";
+import IVoter from "./types/IVoter";
+
+type Store = IUser & IVoter;
 const useStore = create<Store>()((...a) => ({
   ...createUserSlice(...a),
+  ...createVoterSlice(...a),
 }));
 
 if (process.env.NODE_ENV === "development") {

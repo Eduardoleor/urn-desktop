@@ -31,8 +31,8 @@ export default function SignIn() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    user: "",
-    password: "",
+    user: "president",
+    password: "M0nd4y$44",
   });
 
   const handleSignIn = async () => {
