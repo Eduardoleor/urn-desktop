@@ -1,6 +1,6 @@
 export type Role = "admin" | "president";
 
-export type User = {
+export type UserStore = {
   id: string;
   name: string;
   role: Role;
@@ -9,8 +9,8 @@ export type User = {
 };
 
 interface IUser {
-  user: Array<User>;
-  addUser: (user: User) => void;
+  user: Array<UserStore>;
+  addUser: (user: UserStore) => void;
   removeAllUsers: () => void;
 }
 

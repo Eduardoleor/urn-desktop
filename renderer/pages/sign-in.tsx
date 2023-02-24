@@ -23,6 +23,7 @@ import Button from "@/components/button";
 import { ROUTES } from "@/constants/routes";
 import { fetchSignIn } from "@/api/auth";
 import useStore from "@/store/useStore";
+import { UserStore } from "@/store/types/IUser";
 
 export default function SignIn() {
   const router = useRouter();
@@ -39,9 +40,13 @@ export default function SignIn() {
       return alert("Todos los campos son obligatorios");
     }
     try {
-      const user = await fetchSignIn(form.user, form.password);
-      addUser(user);
-      router.push(ROUTES.VERIFY_VOTES);
+      const user: UserStore = await fetchSignIn(form.user, form.password);
+      if (user.active) {
+        addUser(user);
+        router.push(ROUTES.VERIFY_VOTES);
+      } else {
+        alert("Usuario inactivo");
+      }
     } catch (err) {
       alert(err.response?.data.message || "Error al iniciar sesión");
     }
