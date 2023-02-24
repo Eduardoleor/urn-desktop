@@ -1,42 +1,27 @@
 name: Build/release
-on:
-  push:
-    branches:
-      - main
+
+on: push
 
 jobs:
-  build_on_linux:
-    runs-on: ubuntu-latest
+  release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 16
-    - name: install dependencies
-      run: yarn install
-    - name: build
-      run: yarn nextron build --linux
-
-  build_on_mac:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 16
-    - name: install dependencies
-      run: yarn install
-    - name: build
-      run: yarn nextron build --mac --x64
-
-  build_on_win:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 16
-    - name: install dependencies
-      run: yarn install
-    - name: build
-      run: yarn nextron build --win --x64
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+      - name: Install Node.js, NPM and Yarn ⚙️
+        uses: actions/setup-node@master
+        with:
+          node-version: 16
+      - name: Build/release Electron app ⚒️
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          skip_build: false 
+      - name: Archive production builds 🚀
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist folder
+          path: dist/**
