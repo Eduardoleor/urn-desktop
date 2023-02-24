@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -11,9 +11,11 @@ import PrinterIllustration from "@/components/illustrations/printer.svg";
 import LogOutIllustration from "@/components/illustrations/logout.svg";
 
 import { ROUTES } from "@/constants/routes";
+import ReactToPrint from "react-to-print";
 
 export default function VerifyVotes() {
   const router = useRouter();
+  let componentRef: any = useRef();
 
   const handleLogout = () => {};
 
@@ -31,14 +33,33 @@ export default function VerifyVotes() {
           <Typography sx={styles.title}>Impresión de votos</Typography>
           <Box sx={styles.form}>
             <PrinterIllustration />
-            <Typography sx={styles.subtitle}>
-              La urna contiene: 0 votos
-            </Typography>
-            <Button variant="outlined">
-              <Typography style={styles.buttonTextOutline as any}>
-                Imprimir votos
+            <Box ref={(el) => (componentRef = el)}>
+              <Typography justifyContent="flex-end" textAlign="right">
+                {new Date().toLocaleDateString("es-MX", {
+                  timeZone: "America/Los_Angeles",
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  timeZoneName: "short",
+                })}
               </Typography>
-            </Button>
+              <Typography sx={styles.subtitle}>
+                La urna contiene: 0 votos
+              </Typography>
+            </Box>
+            <ReactToPrint
+              content={() => componentRef}
+              trigger={() => (
+                <Button variant="outlined">
+                  <Typography style={styles.buttonTextOutline as any}>
+                    Imprimir votos
+                  </Typography>
+                </Button>
+              )}
+            />
             <Button variant="contained" onClick={handleContinue}>
               <Typography style={styles.buttonText as any}>
                 Continuar
