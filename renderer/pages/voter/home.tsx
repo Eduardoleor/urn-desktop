@@ -8,6 +8,7 @@ import Layout from "@/components/layout";
 import Button from "@/components/button";
 
 import { Vote } from "@/types/votes";
+import { ROUTES } from "@/constants/routes";
 
 export default function VoterHome() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function VoterHome() {
   const handleType = (type: Vote) => {
     switch (type) {
       case "representative":
+        router.push(ROUTES.REPRESENTATIVE_FEDERAL);
         break;
       case "committee":
         break;

@@ -5,4 +5,5 @@ export enum ROUTES {
   PRESIDENT_VERIFY_VOTES = "/president/verify-votes",
   VOTER_READ_CODE = "/voter/read-code",
   VOTER_HOME = "/voter/home",
+  REPRESENTATIVE_FEDERAL = "/representative/federal",
 }
