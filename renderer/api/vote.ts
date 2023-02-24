@@ -16,4 +16,21 @@ const fetchCountVote = async (id: string) => {
   }
 };
 
-export { fetchCountVote };
+const fetchRegisterVoter = async (id: string, key: string) => {
+  console.log(id, key);
+  try {
+    const response = await axios({
+      method: "post",
+      url: `${BASE_API}/vote/register`,
+      data: {
+        id,
+        voter_key: key,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { fetchCountVote, fetchRegisterVoter };

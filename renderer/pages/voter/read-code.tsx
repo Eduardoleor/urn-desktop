@@ -1,8 +1,20 @@
-import React, { CSSProperties } from "react";
+import React, {
+  CSSProperties,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Box, Stack, SxProps, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Stack,
+  SxProps,
+  Typography,
+} from "@mui/material";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import EastIcon from "@mui/icons-material/East";
 
@@ -10,13 +22,60 @@ import Layout from "@/components/layout";
 import Button from "@/components/button";
 
 import { ROUTES } from "@/constants/routes";
+import { CODE_VERIFY_LENGTH, COUNT_TIMER } from "@/constants/vote";
+import { fetchRegisterVoter } from "@/api/vote";
+import useStore from "@/store/useStore";
 
 export default function ReadCode() {
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleContinue = () => {
+  const [code, setCode] = useState<string | null>("123456789");
+  const [counter, setCounter] = useState(COUNT_TIMER);
+  const [loading, setLoading] = useState(false);
+
+  const user = useStore((state) => state.user);
+
+  const countTimer = useMemo(() => {
+    const minutes = Math.floor(counter / 60);
+    const seconds = counter % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }, [counter]);
+
+  const onVerifyCode = async () => {
+    setLoading(true);
+    try {
+      const voter = await fetchRegisterVoter(String(user[0]?.id), code);
+      console.log(voter);
+    } catch (err) {
+      alert(err.response?.data.message || "Error al iniciar votación");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
     router.push(ROUTES.VOTER_HOME);
   };
+
+  useEffect(() => {
+    const timer =
+      counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+    return () => clearInterval(Number(timer));
+  }, [counter]);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (code.length >= CODE_VERIFY_LENGTH) {
+      setCode("");
+      onVerifyCode();
+    }
+  }, [code]);
 
   return (
     <React.Fragment>
@@ -24,7 +83,7 @@ export default function ReadCode() {
         <title>Lectura de QR</title>
       </Head>
       <Layout orientationBackground="topBottom">
-        <Box sx={styles.container}>
+        <Box sx={styles.container} onClick={() => inputRef.current?.focus()}>
           <Typography sx={styles.title}>
             Escanea el código en el lector
           </Typography>
@@ -35,11 +94,29 @@ export default function ReadCode() {
               />
               <EastIcon sx={{ fontSize: 250, color: "GrayText" }} />
             </Stack>
-            <Button variant="outlined" onClick={handleContinue}>
-              <Typography sx={styles.buttonTextOutline}>
-                Reintentar escaneo
-              </Typography>
-            </Button>
+            {!loading && (
+              <>
+                {counter === 0 ? (
+                  <Button variant="outlined" onClick={handleRetry}>
+                    <Typography sx={styles.buttonTextOutline}>
+                      Reintentar escaneo
+                    </Typography>
+                  </Button>
+                ) : (
+                  <>
+                    <CircularProgress color="secondary" />
+                    <Typography sx={styles.subtitle}>{countTimer}</Typography>
+                  </>
+                )}
+              </>
+            )}
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              ref={inputRef}
+              style={{ width: 0, height: 0, border: "none" }}
+            />
+            {loading && <CircularProgress color="secondary" />}
           </Box>
         </Box>
       </Layout>
